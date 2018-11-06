@@ -144,6 +144,7 @@ AC_CHECK_HEADERS([\
 	alloca.h \
 	byteswap.h \
 	endian.h \
+	iconv.h \
 	selinux/selinux.h \
 	sys/endian.h \
 	sys/prctl.h \
@@ -162,6 +163,20 @@ AC_SEARCH_LIBS([dlopen], [dl dld], [
         AC_SUBST([DL_LIBS])
     ], [AC_MSG_ERROR([unable to find the dlopen() function])
 ])
+LIBS="$old_LIBS"
+
+old_LIBS="$LIBS"
+AC_SEARCH_LIBS([iconv], [iconv], [
+        AS_IF([test "x$ac_cv_search_iconv" != "xnone required"],
+	    [ICONV_LIBS="$ac_cv_search_iconv"], [ICONV_LIBS=])
+	], [
+        AC_SEARCH_LIBS([libiconv], [iconv], [
+                AS_IF([test "x$ac_cv_search_libiconv" != "xnone required"],
+                [ICONV_LIBS="$ac_cv_search_libiconv"], [ICONV_LIBS=])
+            ], [AC_MSG_ERROR([unable to find a library containing iconv])
+        ])
+])
+AC_SUBST([ICONV_LIBS])
 LIBS="$old_LIBS"
 
 dnl Check if -rdynamic linker flag works.
