@@ -120,6 +120,10 @@ cow_load (void)
   char *template;
 
   tmpdir = getenv ("TMPDIR");
+#ifdef P_tmpdir
+  if (!tmpdir)
+    tmpdir = P_tmpdir;
+#endif
   if (!tmpdir)
     tmpdir = "/var/tmp";
 

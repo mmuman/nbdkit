@@ -107,7 +107,21 @@ static void *
 example3_open (int readonly)
 {
   struct example3_handle *h;
-  char template[] = "/var/tmp/diskXXXXXX";
+  const char *tmpdir;
+  size_t len;
+  char *template;
+
+  tmpdir = getenv ("TMPDIR");
+#ifdef P_tmpdir
+  if (!tmpdir)
+    tmpdir = P_tmpdir;
+#endif
+  if (!tmpdir)
+    tmpdir = "/var/tmp";
+
+  len = strlen (tmpdir) + 12;
+  template = alloca (len);
+  snprintf (template, len, "%s/diskXXXXXX", tmpdir);
 
   h = malloc (sizeof *h);
   if (h == NULL) {

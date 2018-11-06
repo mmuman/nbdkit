@@ -74,6 +74,10 @@ make_iso (void)
 
   /* Path for temporary file. */
   tmpdir = getenv ("TMPDIR");
+#ifdef P_tmpdir
+  if (tmpdir == NULL)
+    tmpdir = P_tmpdir;
+#endif
   if (tmpdir == NULL)
     tmpdir = "/var/tmp";
   if (asprintf (&template, "%s/isoXXXXXX", tmpdir) == -1) {
